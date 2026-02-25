@@ -7,10 +7,7 @@ import (
 )
 
 func TestHealthzHandler(t *testing.T) {
-	svr, err := NewHTTPServer("127.0.0.1:0", "../../web/templates")
-	if err != nil {
-		t.Fatal(err)
-	}
+	svr := setupServer(t)
 
 	req, err := http.NewRequest("GET", "/healthz", nil)
 	if err != nil {
@@ -30,4 +27,15 @@ func TestHealthzHandler(t *testing.T) {
 	if got := rr.Body.String(); got != want {
 		t.Errorf("handler returned unexpected body: got: %s; want: %s", got, want)
 	}
+}
+
+func setupServer(t *testing.T) *HTTPServer {
+	t.Helper()
+
+	svr, err := NewHTTPServer("127.0.0.1:0", "../../web/templates")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	return svr
 }

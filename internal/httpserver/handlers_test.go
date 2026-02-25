@@ -6,10 +6,10 @@ import (
 	"testing"
 )
 
-func TestHealthzHandler(t *testing.T) {
+func TestHandleHealthz(t *testing.T) {
 	svr := setupServer(t)
 
-	req, err := http.NewRequest("GET", "/healthz", nil)
+	req, err := http.NewRequest(http.MethodGet, "/healthz", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -27,6 +27,20 @@ func TestHealthzHandler(t *testing.T) {
 	if got := rr.Body.String(); got != want {
 		t.Errorf("handler returned unexpected body: got: %s; want: %s", got, want)
 	}
+}
+
+func TestHandleIndex(t *testing.T) {
+	svr := setupServer(t)
+	req := httptest.NewRequest(http.MethodGet, "/", nil)
+	w := httptest.NewRecorder()
+	svr.handleIndex(w, req)
+	res := w.Result()
+	defer res.Body.Close()
+
+	if res.StatusCode != http.StatusOK {
+		t.Fatalf("want: %d; got: %d", http.StatusOK, res.StatusCode)
+	}
+
 }
 
 func setupServer(t *testing.T) *HTTPServer {

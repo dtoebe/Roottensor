@@ -22,19 +22,6 @@ func NewHTTPServer(addr string) *HTTPServer {
 	}
 }
 
-func (s *HTTPServer) routes() http.Handler {
-	mux := http.NewServeMux()
-
-	mux.HandleFunc("/healthz", s.handleHealthz)
-
-	return mux
-}
-
-func (s *HTTPServer) handleHealthz(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("OK"))
-}
-
 func (s *HTTPServer) Run(ctx context.Context) error {
 	srv := &http.Server{
 		Addr:    s.addr,

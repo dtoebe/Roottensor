@@ -3,6 +3,7 @@
         "hdlr",
         "Healthz",
         "srvr",
+        "tmpl",
         "tpls"
     ]
 }

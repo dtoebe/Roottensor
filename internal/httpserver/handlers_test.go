@@ -64,7 +64,7 @@ func TestHandleIndex(t *testing.T) {
 func setupServer(t *testing.T) *HTTPServer {
 	t.Helper()
 
-	svr, err := NewHTTPServer("127.0.0.1:0", "../../web/templates")
+	svr, err := NewHTTPServer("127.0.0.1:0", "../../web/templates", nil)
 	if err != nil {
 		t.Fatal(err)
 	}

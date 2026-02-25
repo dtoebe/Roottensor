@@ -10,7 +10,7 @@ import (
 
 func TestServerLifecycle(t *testing.T) {
 	addr := ":3333"
-	srv, err := NewHTTPServer(addr, "../../web/templates")
+	srv, err := NewHTTPServer(addr, "../../web/templates", nil)
 	if err != nil {
 		t.Fatal(err)
 	}

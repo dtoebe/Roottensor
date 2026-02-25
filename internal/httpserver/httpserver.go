@@ -10,14 +10,17 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+
+	"github.com/dtoebe/RootTensor/internal/store"
 )
 
 type HTTPServer struct {
 	addr      string
 	templates *Templates
+	db        *store.SQliteDB
 }
 
-func NewHTTPServer(addr, tmplRoot string) (*HTTPServer, error) {
+func NewHTTPServer(addr, tmplRoot string, db *store.SQliteDB) (*HTTPServer, error) {
 	layout, err := loadTemplates(tmplRoot)
 	if err != nil {
 		return nil, err
@@ -26,6 +29,7 @@ func NewHTTPServer(addr, tmplRoot string) (*HTTPServer, error) {
 	return &HTTPServer{
 		addr:      addr,
 		templates: layout,
+		db:        db,
 	}, nil
 }
 

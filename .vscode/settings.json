@@ -3,6 +3,7 @@
         "hdlr",
         "Healthz",
         "mattn",
+        "roottensor",
         "srvr",
         "tmpl",
         "tpls"

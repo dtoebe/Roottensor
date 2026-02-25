@@ -10,7 +10,10 @@ import (
 
 func TestServerLifecycle(t *testing.T) {
 	addr := ":3333"
-	srv := NewHTTPServer(addr)
+	srv, err := NewHTTPServer(addr, "../../web/templates")
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()

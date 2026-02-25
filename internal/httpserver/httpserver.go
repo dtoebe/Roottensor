@@ -13,13 +13,20 @@ import (
 )
 
 type HTTPServer struct {
-	addr string
+	addr      string
+	templates *Templates
 }
 
-func NewHTTPServer(addr string) *HTTPServer {
-	return &HTTPServer{
-		addr: addr,
+func NewHTTPServer(addr, tmplRoot string) (*HTTPServer, error) {
+	layout, err := loadTemplates(tmplRoot)
+	if err != nil {
+		return nil, err
 	}
+
+	return &HTTPServer{
+		addr:      addr,
+		templates: layout,
+	}, nil
 }
 
 func (s *HTTPServer) Run(ctx context.Context) error {

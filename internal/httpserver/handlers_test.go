@@ -7,7 +7,10 @@ import (
 )
 
 func TestHealthzHandler(t *testing.T) {
-	svr := NewHTTPServer("127.0.0.1:0")
+	svr, err := NewHTTPServer("127.0.0.1:0", "../../web/templates")
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	req, err := http.NewRequest("GET", "/healthz", nil)
 	if err != nil {

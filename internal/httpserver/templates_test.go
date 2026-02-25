@@ -17,7 +17,7 @@ func TestLoadTemplates(t *testing.T) {
 			t.Fatalf("failed to write layout.html: %v", err)
 		}
 
-		tpls, err := LoadTemplates(dir)
+		tpls, err := loadTemplates(dir)
 		if err != nil {
 			t.Fatalf("LoadTemplates returned error: %v", err)
 		}
@@ -33,7 +33,7 @@ func TestLoadTemplates(t *testing.T) {
 	t.Run("LoadTemplates missing layout", func(t *testing.T) {
 		dir := t.TempDir()
 
-		tpls, err := LoadTemplates(dir)
+		tpls, err := loadTemplates(dir)
 		if err == nil {
 			t.Fatal("expected missing layout.html, got nil")
 		}

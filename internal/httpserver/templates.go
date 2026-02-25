@@ -9,7 +9,7 @@ type Templates struct {
 	index *template.Template
 }
 
-func LoadTemplates(root string) (*Templates, error) {
+func loadTemplates(root string) (*Templates, error) {
 	layoutPath := filepath.Join(root, "layout.html")
 
 	layout, err := template.ParseFiles(layoutPath)

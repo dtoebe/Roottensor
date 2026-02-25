@@ -1,6 +1,7 @@
 package httpserver
 
 import (
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -9,24 +10,41 @@ import (
 func TestHandleHealthz(t *testing.T) {
 	svr := setupServer(t)
 
-	req, err := http.NewRequest(http.MethodGet, "/healthz", nil)
-	if err != nil {
-		t.Fatal(err)
-	}
+	t.Run("healthz: response", func(t *testing.T) {
+		req := httptest.NewRequest(http.MethodGet, "/healthz", nil)
+		w := httptest.NewRecorder()
+		svr.handleHealthz(w, req)
+		res := w.Result()
+		defer res.Body.Close()
 
-	rr := httptest.NewRecorder()
-	hdlr := http.HandlerFunc(svr.handleHealthz)
+		if res.StatusCode != http.StatusOK {
+			t.Errorf("handler returned wrong status code: got: %d; want: %d",
+				res.StatusCode, http.StatusOK)
+		}
 
-	hdlr.ServeHTTP(rr, req)
+		b, err := io.ReadAll(res.Body)
+		if err != nil {
+			t.Fatalf("failed to read body: %v", err)
+		}
+		got := string(b)
+		want := "OK"
+		if got != want {
+			t.Errorf("handler returned unexpected body: got: %s; want: %s", got, want)
+		}
+	})
 
-	if status := rr.Code; status != http.StatusOK {
-		t.Errorf("handler returned wrong status code: got: %d; want: %d", status, http.StatusOK)
-	}
+	t.Run("healthz: wrong method", func(t *testing.T) {
+		req := httptest.NewRequest(http.MethodPost, "/healthz", nil)
+		w := httptest.NewRecorder()
+		svr.handleHealthz(w, req)
+		res := w.Result()
+		defer res.Body.Close()
 
-	want := "OK"
-	if got := rr.Body.String(); got != want {
-		t.Errorf("handler returned unexpected body: got: %s; want: %s", got, want)
-	}
+		if res.StatusCode != http.StatusMethodNotAllowed {
+			t.Errorf("handler returned wrong status code: got: %d; want: %d",
+				res.StatusCode, http.StatusMethodNotAllowed)
+		}
+	})
 }
 
 func TestHandleIndex(t *testing.T) {

@@ -3,7 +3,9 @@ package store
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 
+	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -44,4 +46,19 @@ func (d *SQliteDB) QueryRow(query string, args ...any) *sql.Row {
 
 func (d *SQliteDB) Query(query string, args ...any) (*sql.Rows, error) {
 	return d.db.Query(query, args...)
+}
+
+func (d *SQliteDB) Migrate(dir string) error {
+	dsn := fmt.Sprintf("sqlite3://%s", d.path)
+	m, err := migrate.New("file://"+dir, dsn)
+	if err != nil {
+		return fmt.Errorf("migration error: %v", err)
+	}
+	defer m.Close()
+
+	if err := m.Up(); err != nil {
+		return fmt.Errorf("migration apply error: %v", err)
+	}
+
+	return nil
 }

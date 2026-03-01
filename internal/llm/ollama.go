@@ -213,7 +213,7 @@ func (p *OllamaProvider) doRequest(ctx context.Context, reqBody *ollamaChatReque
 
 	resp, err := p.client.Do(req)
 	if err != nil {
-		return "", fmt.Errorf("olloama request error: %v", err)
+		return "", fmt.Errorf("ollama request error: %v", err)
 	}
 	defer resp.Body.Close()
 

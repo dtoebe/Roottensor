@@ -341,7 +341,7 @@ func TestOllamaProvider_doRequest(t *testing.T) {
 		if got != "" {
 			t.Fatalf("got %q, want empty string", got)
 		}
-		if err == nil || !strings.Contains(err.Error(), "olloama request error:") {
+		if err == nil || !strings.Contains(err.Error(), "ollama request error:") {
 			t.Fatalf("expected request error, got: %v", err)
 		}
 		if err == nil || !strings.Contains(err.Error(), wantErr.Error()) {

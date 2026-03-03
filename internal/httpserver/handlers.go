@@ -1,6 +1,9 @@
 package httpserver
 
-import "net/http"
+import (
+	"log"
+	"net/http"
+)
 
 func (s *HTTPServer) routes() http.Handler {
 	mux := http.NewServeMux()
@@ -30,6 +33,7 @@ func (s *HTTPServer) handleHealthz(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "plain/text; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	if _, err := w.Write([]byte("OK")); err != nil {
+		log.Printf("error wrinting response: %s; error: %v", r.URL, err)
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 	}
 }

@@ -10,6 +10,9 @@ import (
 
 func main() {
 	db, err := store.NewSQLiteDB("roottensor.db")
+	if err != nil {
+		log.Fatalf("failed to initialize db: %v", err)
+	}
 	srvr, err := httpserver.NewHTTPServer(":3333", "web/templates", db)
 	if err != nil {
 		log.Fatalf("failed to initialize server: %v", err)

@@ -121,9 +121,9 @@ func TestModel(t *testing.T) {
 }
 
 func TestBaseURL(t *testing.T) {
-	olm, wantBaseUrl, _ := initOllamaProvider(t)
-	if olm.BaseURL() != wantBaseUrl {
-		t.Fatalf("baseUrl: got: %s; want: %s", olm.BaseURL(), wantBaseUrl)
+	olm, wantBaseURL, _ := initOllamaProvider(t)
+	if olm.BaseURL() != wantBaseURL {
+		t.Fatalf("baseURL: got: %s; want: %s", olm.BaseURL(), wantBaseURL)
 	}
 }
 
@@ -443,9 +443,9 @@ func TestOllamaProvider_doRequest(t *testing.T) {
 
 func initOllamaProvider(t *testing.T) (*OllamaProvider, string, string) {
 	t.Helper()
-	baseUrl := "http://example.com"
+	baseURL := "http://example.com"
 	model := "FooModel"
-	return NewOllamaProvider(baseUrl, model), baseUrl, model
+	return NewOllamaProvider(baseURL, model), baseURL, model
 }
 
 func newProviderForStream(baseURL string, rt http.RoundTripper) *OllamaProvider {

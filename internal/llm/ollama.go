@@ -53,8 +53,9 @@ func NewOllamaProvider(baseURL, model string) *OllamaProvider {
 }
 
 // TODO: Move to better place
-func IsURL(webUrl string) bool {
-	u, err := url.ParseRequestURI(webUrl)
+
+func IsURL(webURL string) bool {
+	u, err := url.ParseRequestURI(webURL)
 	if err != nil {
 		return false
 	}

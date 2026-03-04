@@ -410,10 +410,6 @@ func TestOllamaProvider_doRequest(t *testing.T) {
 		if err == nil || !strings.Contains(err.Error(), "ollama returned error:") {
 			t.Fatalf("expected parsed.Error branch error, got: %v", err)
 		}
-
-		// NOTE: your implementation currently formats: fmt.Errorf("ollama returned error: %v", err)
-		// which prints the *previous* err (likely nil) rather than parsed.Error.
-		// This test just asserts you hit that branch.
 	})
 
 	t.Run("success returns message content", func(t *testing.T) {

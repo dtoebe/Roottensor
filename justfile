@@ -18,6 +18,7 @@ vet: tidy
 
 clean:
   rm -rf ./dist
+  rm -rf ./tmp
 
 default:
   just --list

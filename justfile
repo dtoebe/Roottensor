@@ -16,6 +16,9 @@ run: build
 vet: tidy
   go vet ./...
 
+rest:
+  posting --collection ./posting-collection
+
 clean:
   rm -rf ./dist
   rm -rf ./tmp

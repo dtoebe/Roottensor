@@ -1,0 +1,4 @@
+name: test-api
+description: |-
+  Test the api calls
+url: http://localhost:3333/healthz

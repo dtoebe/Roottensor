@@ -43,7 +43,7 @@ func (s *HTTPServer) Run(ctx context.Context) error {
 	srvErr := make(chan error, 1)
 
 	go func() {
-		log.Printf("server listening on %s", s.addr)
+		log.Printf("server listening on http://localhost%s", s.addr)
 		if err := srv.ListenAndServe(); err != nil {
 			srvErr <- err
 		}

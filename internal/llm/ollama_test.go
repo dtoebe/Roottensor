@@ -17,57 +17,57 @@ import (
 func TestNewOllamaProvider(t *testing.T) {
 	tests := []struct {
 		name        string
-		baseUrl     string
+		baseURL     string
 		model       string
-		wantBaseUrl string
+		wantBaseURL string
 		wantModel   string
 	}{
 		{
 			name:        "valid url and model",
-			baseUrl:     "http://example.com",
+			baseURL:     "http://example.com",
 			model:       "llama3",
-			wantBaseUrl: "http://example.com",
+			wantBaseURL: "http://example.com",
 			wantModel:   "llama3",
 		},
 		{
 			name:        "invalid url defaults to localhost",
-			baseUrl:     "not-a-url",
+			baseURL:     "not-a-url",
 			model:       "llama3",
-			wantBaseUrl: "http://localhost:11434",
+			wantBaseURL: "http://localhost:11434",
 			wantModel:   "llama3",
 		},
 		{
 			name:        "empty url defaults to localhost",
-			baseUrl:     "",
+			baseURL:     "",
 			model:       "llama3",
-			wantBaseUrl: "http://localhost:11434",
+			wantBaseURL: "http://localhost:11434",
 			wantModel:   "llama3",
 		},
 		{
 			name:        "empty model defaults to deepseek",
-			baseUrl:     "http://example.com",
+			baseURL:     "http://example.com",
 			model:       "",
-			wantBaseUrl: "http://example.com",
+			wantBaseURL: "http://example.com",
 			wantModel:   "deepseek-r1:8b",
 		},
 		{
 			name:        "both empty defaults to localhost and deepseek",
-			baseUrl:     "",
+			baseURL:     "",
 			model:       "",
-			wantBaseUrl: "http://localhost:11434",
+			wantBaseURL: "http://localhost:11434",
 			wantModel:   "deepseek-r1:8b",
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := NewOllamaProvider(tt.baseUrl, tt.model)
+			got := NewOllamaProvider(tt.baseURL, tt.model)
 
 			if got == nil {
 				t.Fatal("NewOllamaProvider returned nil")
 			}
-			if got.baseUrl != tt.wantBaseUrl {
-				t.Errorf("baseUrl: got %q want %q", got.baseUrl, tt.wantBaseUrl)
+			if got.baseURL != tt.wantBaseURL {
+				t.Errorf("baseURL: got %q want %q", got.baseURL, tt.wantBaseURL)
 			}
 			if got.model != tt.wantModel {
 				t.Errorf("model: got %q want %q", got.model, tt.wantModel)
@@ -284,7 +284,7 @@ func (f roundTripFunc) RoundTrip(r *http.Request) (*http.Response, error) { retu
 
 func newProviderWithTransport(rt http.RoundTripper) *OllamaProvider {
 	return &OllamaProvider{
-		baseUrl: "http://mock",
+		baseURL: "http://mock",
 		model:   "mock-model",
 		client: &http.Client{
 			Timeout:   5 * time.Second,
@@ -296,7 +296,7 @@ func newProviderWithTransport(rt http.RoundTripper) *OllamaProvider {
 func TestOllamaProvider_doRequest(t *testing.T) {
 	t.Run("marshal error", func(t *testing.T) {
 		p := newProviderWithTransport(roundTripFunc(func(r *http.Request) (*http.Response, error) {
-			t.Fatal("RoundTrip should not be called when marshal fails")
+			t.Fatal("Round Trip should not be called when marshal fails")
 			return nil, nil
 		}))
 
@@ -450,7 +450,7 @@ func initOllamaProvider(t *testing.T) (*OllamaProvider, string, string) {
 
 func newProviderForStream(baseURL string, rt http.RoundTripper) *OllamaProvider {
 	return &OllamaProvider{
-		baseUrl: baseURL,
+		baseURL: baseURL,
 		model:   "mock-model",
 		client: &http.Client{
 			Timeout:   5 * time.Second,

@@ -1,3 +1,4 @@
+// Package llm
 package llm
 
 import (
@@ -14,7 +15,7 @@ import (
 )
 
 type OllamaProvider struct {
-	baseUrl string
+	baseURL string
 	model   string
 	client  *http.Client
 }
@@ -27,9 +28,9 @@ const (
 	RoleAssistant Role = "assistant"
 )
 
-func NewOllamaProvider(baseUrl, model string) *OllamaProvider {
-	if !IsURL(baseUrl) {
-		baseUrl = "http://localhost:11434"
+func NewOllamaProvider(baseURL, model string) *OllamaProvider {
+	if !IsURL(baseURL) {
+		baseURL = "http://localhost:11434"
 	}
 
 	if model == "" {
@@ -37,7 +38,7 @@ func NewOllamaProvider(baseUrl, model string) *OllamaProvider {
 	}
 
 	return &OllamaProvider{
-		baseUrl: baseUrl,
+		baseURL: baseURL,
 		model:   model,
 		client: &http.Client{
 			Timeout: 60 * time.Second,
@@ -72,7 +73,7 @@ func (p *OllamaProvider) Model() string {
 }
 
 func (p *OllamaProvider) BaseURL() string {
-	return p.baseUrl
+	return p.baseURL
 }
 
 type Message struct {
@@ -104,7 +105,8 @@ type ollamaChatResponse struct {
 func (p *OllamaProvider) Chat(
 	ctx context.Context,
 	msgs []Message,
-	opts *CallOptions) (string, error) {
+	opts *CallOptions,
+) (string, error) {
 	if opts != nil && opts.Stream {
 		var buf bytes.Buffer
 		err := p.chatStream(ctx, msgs, opts, func(chunk string) {
@@ -130,7 +132,8 @@ func (p *OllamaProvider) chatStream(
 	ctx context.Context,
 	msgs []Message,
 	opts *CallOptions,
-	onChunk func(string)) error {
+	onChunk func(string),
+) error {
 	if onChunk == nil {
 		return errors.New("onChunk callback cannot be nil")
 	}
@@ -200,7 +203,7 @@ func (p *OllamaProvider) doRequest(ctx context.Context, reqBody *ollamaChatReque
 		return "", fmt.Errorf("marshal error: %v", err)
 	}
 
-	url, err := url.JoinPath(p.baseUrl, "/api/chat")
+	url, err := url.JoinPath(p.baseURL, "/api/chat")
 	if err != nil {
 		return "", fmt.Errorf("ollama stream build url error: %v", err)
 	}
@@ -235,7 +238,8 @@ func (p *OllamaProvider) doRequest(ctx context.Context, reqBody *ollamaChatReque
 func (p *OllamaProvider) doRequestStream(
 	ctx context.Context,
 	reqBody *ollamaChatRequest,
-	onChunk func(string)) (string, error) {
+	onChunk func(string),
+) (string, error) {
 	reqBody.Stream = true
 
 	b, err := json.Marshal(reqBody)
@@ -243,7 +247,7 @@ func (p *OllamaProvider) doRequestStream(
 		return "", fmt.Errorf("ollama stream marshal error: %v", err)
 	}
 
-	url, err := url.JoinPath(p.baseUrl, "/api/chat")
+	url, err := url.JoinPath(p.baseURL, "/api/chat")
 	if err != nil {
 		return "", fmt.Errorf("ollama stream build url error: %v", err)
 	}

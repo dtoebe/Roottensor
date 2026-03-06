@@ -47,20 +47,6 @@ func TestHandleHealthz(t *testing.T) {
 	})
 }
 
-func TestHandleIndex(t *testing.T) {
-	svr := setupServer(t)
-	req := httptest.NewRequest(http.MethodGet, "/", nil)
-	w := httptest.NewRecorder()
-	svr.handleIndex(w, req)
-	res := w.Result()
-	defer res.Body.Close()
-
-	if res.StatusCode != http.StatusOK {
-		t.Fatalf("want: %d; got: %d", http.StatusOK, res.StatusCode)
-	}
-
-}
-
 func setupServer(t *testing.T) *HTTPServer {
 	t.Helper()
 

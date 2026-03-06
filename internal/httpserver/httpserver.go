@@ -15,22 +15,15 @@ import (
 )
 
 type HTTPServer struct {
-	addr      string
-	templates *Templates
+	addr string
 	// TODO: Move DB to a service in-between
 	db *store.SQliteDB
 }
 
 func NewHTTPServer(addr, tmplRoot string, db *store.SQliteDB) (*HTTPServer, error) {
-	layout, err := loadTemplates(tmplRoot)
-	if err != nil {
-		return nil, err
-	}
-
 	return &HTTPServer{
-		addr:      addr,
-		templates: layout,
-		db:        db,
+		addr: addr,
+		db:   db,
 	}, nil
 }
 

@@ -31,12 +31,6 @@ func (s *HTTPServer) handlePage(title string, content templ.Component) http.Hand
 	}
 }
 
-func (s *HTTPServer) handleIndex(w http.ResponseWriter, r *http.Request) {
-	if err := s.templates.index.ExecuteTemplate(w, "layout.html", nil); err != nil {
-		http.Error(w, "error loading page", http.StatusInternalServerError)
-	}
-}
-
 func (s *HTTPServer) handleHealthz(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)

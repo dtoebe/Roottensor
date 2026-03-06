@@ -3,19 +3,32 @@ package httpserver
 import (
 	"log"
 	"net/http"
+
+	"github.com/a-h/templ"
+	"github.com/dtoebe/RootTensor/internal/templates"
 )
 
 func (s *HTTPServer) routes() http.Handler {
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/", s.handleIndex)
-	mux.HandleFunc("/healthz", s.handleHealthz)
+	mux.HandleFunc("/", s.handlePage("Home", nil))
+	mux.HandleFunc("GET /healthz", s.handleHealthz)
 
 	mux.Handle("/static/",
 		http.StripPrefix("/static/",
 			http.FileServer(http.Dir("web/static"))))
 
 	return mux
+}
+
+func (s *HTTPServer) handlePage(title string, content templ.Component) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		if err := templates.Layout(title, r.URL.Path, content).Render(r.Context(), w); err != nil {
+			http.Error(w, "render error", http.StatusInternalServerError)
+			log.Printf("layout render error: %v", err)
+		}
+	}
 }
 
 func (s *HTTPServer) handleIndex(w http.ResponseWriter, r *http.Request) {

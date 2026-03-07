@@ -11,7 +11,9 @@ import (
 func (s *HTTPServer) routes() http.Handler {
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/", s.handlePage("Home", templates.Home()))
+	mux.HandleFunc("/", s.handlePage("Home", templates.HomePage()))
+	mux.HandleFunc("GET /about", s.handlePage("About", templates.AboutPage()))
+	mux.HandleFunc("GET /settings", s.handlePage("Settings", templates.SettingsPage()))
 	mux.HandleFunc("GET /healthz", s.handleHealthz)
 
 	mux.Handle("/static/",
